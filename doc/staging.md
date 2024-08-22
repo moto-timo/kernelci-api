@@ -1,37 +1,30 @@
 ---
-title: "Early Access"
-date: 2023-09-04
-description: "Beta-testing the new API"
+title: "Staging"
+date: 2024-08-15
+description: "Staging API"
 weight: 5
 ---
 
-As per the [API Transition
-Timeline](https://kernelci.org/blog/posts/2023/api-timeline/), the
-Early Access phase is from 4th September to 4th December 2023.  It
-allows users to request an account on the new KernelCI API for
-beta-testing purposes.
+Maestro has a staging instance running for development purposes.
+It allows users to request an account on the new KernelCI API to give it a try. You can also enable your
+trees, builds, and tests on it. Here is the
+[developer documentation](https://docs.kernelci.org/maestro/pipeline/developer-documentation/) for the same.
 
-There are still lots of incomplete or missing features with the new
-API & Pipeline.  It now has a [production-like
+[Staging
 deployment](https://github.com/kernelci/kernelci-api/tree/main/kube/aks)
-and can already run a minimalist pipeline with KUnit, a kernel build
-and a boot test on QEMU.  The aim of the Early Access phase is to make
-all the adjustments to the design that are necessary before reaching
-full production status.  So please give it a go and create issues on
+can already run a pipeline with KUnit, kselftest, kernel builds
+and boot tests. So please give it a go and create issues on
 GitHub and ask questions on the [mailing
 list](mailto:kernelci@lists.linux.dev), IRC `#kernelci` on libera.chat
 or [Slack](https://kernelci.slack.com) with whatever you may find.
 
 ## Requesting a user account
 
-The number of users and available resources are limited, so while we'll try and
-provide an account for every request we can't give any guarantee at this stage.
-Anyone interested is still very much encouraged to request an account of
-course, the more users the better.
+Anyone interested is very much encouraged to request an account.
 
 It can be done in two simple steps:
 
-* Create an "API Early Access" [issue on
+* Create an "API Staging Access" [issue on
   GitHub](https://github.com/kernelci/kernelci-project/issues/new/choose)
 * Wait for an email confirmation of your user account which should contain a
   randomly-generated password as well as an AzureFiles token
@@ -53,7 +46,7 @@ API at all.
 
 ```toml
 [kci]
-api = 'early-access'
+api = 'staging'
 ```
 
 * Then to run a container with your own settings file:
@@ -108,11 +101,11 @@ Password:
 
 ```toml
 [kci]
-api = 'early-access'
+api = 'staging'
 indent = 4
 
 [kci.secrets]
-api.early-access.token = "<your-api-token-here>"
+api.staging.token = "<your-api-token-here>"
 ```
 
 * To verify things are set up correctly:
@@ -132,11 +125,10 @@ $ kci user whoami
 
 ## Storage
 
-File storage is managed separately from the API services.  As part of the Early
-Access phase, an AzureFiles token is provided to each user to be able to upload
+File storage is managed separately from the API services. An AzureFiles token is provided to each user to be able to upload
 artifacts.  It is one of the storage solutions supported by KernelCI, you may
 also use SSH or soon any S3-compatible storage.  There is a quota, currently
-5TiB for all the Early Access files.  Old files will be deleted after a while
+5TiB for all the staging files.  Old files will be deleted after a while
 so please don't rely on it for any persistent storage.
 
 Each user has a separate Azure File "share", so you need to add a YAML
@@ -145,7 +137,7 @@ such as `config/core/<your-username>.yaml`:
 
 ```yaml
 storage:
-  early-access-azure-<your-username>:
+  staging-azure-<your-username>:
     storage_type: azure
     base_url: https://kciapistagingstorage1.file.core.windows.net/
     sas_public_token: "?sv=2022-11-02&ss=f&srt=sco&sp=r&se=2024-10-17T19:19:12Z&st=2023-10-17T11:19:12Z&spr=https&sig=sLmFlvZHXRrZsSGubsDUIvTiv%2BtzgDq6vALfkrtWnv8%3D"
@@ -165,19 +157,19 @@ time.  For example:
 
 ```toml
 [kci]
-api = "early-access"
-storage = "early-access-azure-<your-username>"
+api = "staging"
+storage = "staging-azure-<your-username>"
 indent = 4
 config = ["/etc/kernelci/core", "<your-username>.yaml"]
 
 [kci.secrets]
-api.early-access.token = "<your-api-token-here>"
-storage.early-access-azure-<your-username>.credentials = "?sp=rcwdl&st=...<your-full-storage-token-here>"
+api.staging.token = "<your-api-token-here>"
+storage.staging-azure-<your-username>.credentials = "?sp=rcwdl&st=...<your-full-storage-token-here>"
 ```
 
 > **Note**: If your username contains a dot or any special character, please
 > surround it with quotes to ensure it gets parsed correctly as TOML.  For
-> example: `storage."early-access-azure-my.name".credentials = "..."`.
+> example: `storage."staging-azure-my.name".credentials = "..."`.
 
 Then here's a quick way to check it's working, still in the same container:
 
@@ -217,4 +209,4 @@ the documention and the overall development [Roadmap on
 GitHub](https://github.com/orgs/kernelci/projects/10/views/15).
 
 If you're unsure what to do next, please feel free to get in touch as mentioned
-at the top of this page by email, IRC or Slack.  Happy beta-testing!
+at the top of this page by email, IRC or Slack.  Happy testing!
